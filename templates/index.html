@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+        h2 {
+            color: #333;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        button:disabled {
+            background: #b0c4de;
+            cursor: not-allowed;
+        }
+        button:hover:enabled {
+            background: #0056b3;
+        }
+        #message {
+            color: #28a745;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .rankings-container {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+
+        /* Loader Styles */
+        .loader {
+            display: none;
+            margin: 10px auto;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Upload Your Resume</h2>
+        <input type="file" id="resume" multiple />
+        <button id="uploadBtn" onclick="uploadResume()">Upload</button>
+        
+        <!-- Loader -->
+        <div class="loader" id="loader"></div>
+
+        <p id="message"></p>
+
+        <div class="rankings-container">
+            <h3>Resume Rankings</h3>
+            <table id="rankings-table">
+                <thead>
+                    <tr>
+                        <th>Filename</th>
+                        <th>Skills Rank</th>
+                        <th>Experience Rank</th>
+                    </tr>
+                </thead>
+                <tbody id="rankings"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function uploadResume() {
+            let fileInput = document.getElementById('resume');
+            let files = fileInput.files;
+            let uploadBtn = document.getElementById("uploadBtn");
+            let loader = document.getElementById("loader");
+
+            if (files.length === 0) {
+                document.getElementById('message').innerText = "Please select at least one file.";
+                return;
+            }
+
+            // Show loader & disable button
+            loader.style.display = "block";
+            uploadBtn.disabled = true;
+
+            let formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                formData.append("files", files[i]);
+            }
+
+            fetch("/upload", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;
+                let rankingsTable = document.getElementById('rankings');
+                rankingsTable.innerHTML = "";
+
+                data.rankings.forEach(resume => {
+                    rankingsTable.innerHTML += `
+                        <tr>
+                            <td><strong>${resume.filename}</strong></td>
+                            <td>${resume.skills_rank}</td>
+                            <td>${resume.experience_rank}</td>
+                        </tr>
+                    `;
+                });
+            })
+            .catch(error => console.error("Error:", error))
+            .finally(() => {
+                // Hide loader & enable button
+                loader.style.display = "none";
+                uploadBtn.disabled = false;
+            });
+        }
+    </script>
+
+</body>
+</html>

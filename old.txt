@@ -1,0 +1,108 @@
+
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"})
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"})
+
+    if file:
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(file_path)
+
+        # Call the function to process and rank the resume
+        # rank = rank_resume(file_path)
+
+
+        # Path to your PDF file
+        pdf_files = [os.path.join(UPLOAD_FOLDER, file) for file in os.listdir(UPLOAD_FOLDER) if file.endswith((".pdf", ".docx"))]
+
+        required_skills = ["user research", "Python", "data Structures", "algorithms"]
+        ranked = len(required_skills) + 1
+
+        # Extracting paragraph after keywords (case-insensitive)
+        word = "skill"
+        keywords = get_synonyms(word)
+        keywords = keywords + ['skills', 'TECH SKILLS', 's k i l l s']
+        keywords.append(word)
+
+        c = []
+        for i in keywords:
+            c.append(i + "s")
+        keywords.extend(c)
+
+ 
+        # Iterate through each PDF file
+        for pdf_file in pdf_files:
+            text_data = extract_text_with_bboxes(pdf_file)
+            layout = detect_column_layout(text_data)
+            p[pdf_file] = layout
+
+            print(f"\nProcessing file: {pdf_file},\n")
+
+            try:
+                # Step 3: Extract the text line by line, preserving the reading order
+                if p[pdf_file] == "Single Column":
+                    print(p[pdf_file])
+                    lines = extract_text_lines(pdf_file)
+                else:
+                    print(p[pdf_file])
+                    lines = detect_columns_and_extract_text(pdf_file)
+
+                print("Extracted text lines in order:\n")
+                print(lines, "\n")
+
+                skills_paragraph = extract_paragraph_after_keywords(lines, keywords)
+
+                # If found, print the paragraph
+                if skills_paragraph:
+                    print("Skills Paragraph:\n")
+                    print(skills_paragraph, "\n")
+                    candidate_ranks = rank_candidate(pdf_file, required_skills, keywords, lines)
+
+                    # Print the ranks
+                    for pdf_path, rank in candidate_ranks.items():
+                        print(f"Resume: {pdf_path}, Rank: {rank},\n")
+                        r[pdf_path] = rank
+                else:
+                    print("Keywords not found in the file.\n")
+                    print("rank: ", ranked, "\n")
+                    r[pdf_file] = ranked
+
+            except Exception as e:
+                ranked = len(required_skills) + 1
+                print(f"Error processing file {pdf_file}: {e},\n")
+                r[pdf_file] = ranked
+
+        word1 = "experiences"
+        keywords1 = get_synonyms(word1)
+        keywords1 = keywords1 + ['W O R K E X P E R I E N C E', 'work experience', "Professional Experience", 
+                                "e x p e r i e n c e", "RESEARCH EXPERIENCE"]
+        keywords1.append(word1)
+
+        c = []
+        for i in keywords1:
+            c.append(i + "s")
+        keywords1.extend(c)
+
+        l = {}
+        rk = rank_candidates(pdf_files, keywords1)
+
+        # Print ranked candidates
+        for idx, (candidate, value) in enumerate(rk, 1):
+            l[candidate] = value
+
+        print("The ranked skills:", r, "\n")
+        o = sort_and_rank_dict(l)
+        print("The ranked experience:", o, "\n")
+
+        # Sort the dictionaries and get the list of sorted keys
+        sorted_keys = sort_dictionaries(r, o)
+        print("The sorted resumes:\n", sorted_keys)
+
+        return jsonify({
+            "message": "File uploaded successfully",
+            "filename": file.filename,
+            "rank": rank
+        })
