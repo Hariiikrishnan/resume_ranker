@@ -519,12 +519,16 @@ if not os.path.exists(UPLOAD_FOLDER):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
 @app.route("/upload", methods=["POST"])
 def upload_file():
+    print(request.form.get("role"))
     if "files" not in request.files:
         return jsonify({"error": "No file part"})
 
     files = request.files.getlist("files")  # Get all uploaded files
+    role = request.form.get("role")  # Get all uploaded files
 
     if not files or files[0].filename == '':
         return jsonify({"error": "No selected files"})
@@ -538,7 +542,41 @@ def upload_file():
     # Now, process ALL uploaded files
     pdf_files = [f for f in file_paths if f.endswith((".pdf", ".docx"))]
 
-    required_skills = ["user research", "Python", "data Structures", "algorithms"]
+    # required_skills = ["user research", "Python", "data Structures", "algorithms"]
+    role_skills = {
+    "Software Engineer": ["Python", "Data Structures", "Algorithms", "System Design", "Git", "OOP"],
+    "Data Scientist": ["Python", "Machine Learning", "Statistics", "Data Visualization", "SQL", "Deep Learning"],
+    "UI/UX Designer": ["User Research", "Wireframing", "Figma", "Prototyping", "Adobe XD", "Interaction Design"],
+    "Backend Developer": ["Node.js", "Python", "API", "Java", "Database", "SpringBoot"],
+    "Frontend Developer": ["JavaScript", "React", "CSS", "HTML", "TypeScript", "Redux"],
+    "DevOps Engineer": ["CI/CD", "Docker", "Kubernetes", "Cloud Platforms", "Terraform", "Bash Scripting"],
+    "Cybersecurity Analyst": ["Network Security", "Penetration Testing", "Cryptography", "SIEM", "Incident Response"],
+    "Mobile App Developer": ["Flutter", "React Native", "Swift", "Kotlin", "Firebase", "REST APIs"],
+    "AI Engineer": ["Deep Learning", "TensorFlow", "PyTorch", "Computer Vision", "NLP", "Reinforcement Learning"],
+    "Cloud Engineer": ["AWS", "Azure", "Google Cloud", "Infrastructure as Code", "Serverless Computing"],
+    "Product Manager": ["Agile Methodologies", "Roadmap Planning", "User Research", "Market Analysis", "Scrum"],
+    "Business Analyst": ["Data Analysis", "SQL", "Business Intelligence", "Requirements Gathering", "Excel"],
+    "Database Administrator": ["SQL", "PostgreSQL", "NoSQL", "Database Optimization", "Backup & Recovery"],
+    "Game Developer": ["Unity", "Unreal Engine", "C#", "Game Physics", "3D Modeling", "Blender"],
+    "Embedded Systems Engineer": ["C", "Microcontrollers", "IoT", "RTOS", "Firmware Development"],
+    "Blockchain Developer": ["Solidity", "Ethereum", "Smart Contracts", "Cryptography", "Hyperledger"],
+    "Digital Marketer": ["SEO", "Google Ads", "Content Marketing", "Social Media", "Email Marketing"],
+    "Mechanical Engineer": ["AutoCAD", "SolidWorks", "ANSYS", "Manufacturing Processes", "CFD"],
+    "Electrical Engineer": ["Circuit Design", "MATLAB", "Embedded Systems", "Power Systems", "PLC"],
+    "Biomedical Engineer": ["Medical Devices", "Biomaterials", "Biomedical Imaging", "Signal Processing"],
+    }
+
+    # Get user input for role
+    user_role = role
+
+    # Fetch required skills dynamically
+    required_skills = role_skills.get(user_role, [])
+
+    if required_skills:
+        print(f"Required Skills for {user_role}: {required_skills}")
+    else:
+        print("Role not found! Please enter a valid role.")
+
     ranked = len(required_skills) + 1
 
     skill_keywords = get_synonyms("skill") + ['skills', 'TECH SKILLS', 's k i l l s', 'skill']
