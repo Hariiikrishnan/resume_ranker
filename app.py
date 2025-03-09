@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify , send_from_directory
 import os
 import random  # Simulating ranking logic
 
@@ -520,6 +520,10 @@ if not os.path.exists(UPLOAD_FOLDER):
 def index():
     return render_template('index.html')
 
+# Endpoint to serve resumes
+@app.route("/resume/<filename>")
+def get_resume(filename):
+    return send_from_directory(app.config["UPLOAD_FOLDER"], filename)   
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
@@ -615,11 +619,12 @@ def upload_file():
     sorted_resumes = sort_dictionaries(skills_rankings, experience_rankings)
 
     response_data = []
-    for pdf_file in sorted_resumes:
+    for pdf_file in sorted_resumes[:5]:
         response_data.append({
             "filename": os.path.basename(pdf_file),
             "skills_rank": skills_rankings.get(pdf_file, ranked),
-            "experience_rank": experience_rankings[pdf_file] if pdf_file in experience_rankings else ranked
+            "experience_rank": experience_rankings[pdf_file] if pdf_file in experience_rankings else ranked,
+            "file_url": f"http://127.0.0.1:5000/resume/{os.path.basename(pdf_file)}",
         })
 
     return jsonify({

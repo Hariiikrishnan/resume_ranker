@@ -147,6 +147,7 @@
                         <th>Filename</th>
                         <th>Skills Rank</th>
                         <th>Experience Rank</th>
+                        <th>Link</th>
                     </tr>
                 </thead>
                 <tbody id="rankings"></tbody>
@@ -195,6 +196,7 @@
                             <td><strong>${resume.filename}</strong></td>
                             <td>${resume.skills_rank}</td>
                             <td>${resume.experience_rank}</td>
+                            <td> <button onclick="window.open('${resume.file_url}', '_blank')">Open Now</button></td>
                         </tr>
                     `;
                 });
