@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify , send_from_directory
+from flask import Flask, request, render_template, jsonify , send_from_directory , redirect , url_for , session
 import os
 import random  # Simulating ranking logic
 
@@ -16,6 +16,7 @@ from datetime import datetime
 
 
 app = Flask(__name__)
+app.secret_key = "idkwihffyon?"
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 r = {}
@@ -627,10 +628,15 @@ def upload_file():
             "file_url": f"http://127.0.0.1:5000/resume/{os.path.basename(pdf_file)}",
         })
 
-    return jsonify({
-        "message": "Files processed successfully",
-        "rankings": response_data
-    })
+    session["rankings"] = response_data
+
+    return redirect(url_for('results'))
+
+
+@app.route('/results')
+def results():
+    rankings = session.get("rankings", [])  # Retrieve data from Session
+    return render_template('results.html', rankings=rankings)
 
 
 if __name__ == '__main__':
