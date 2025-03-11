@@ -6,53 +6,48 @@
     <title>Resume Upload</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fa;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
             text-align: center;
             padding: 20px;
         }
         .container {
             max-width: 500px;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
             margin: auto;
         }
         h2 {
             color: #333;
+            font-weight: 600;
+        }
+        select, input[type="file"], button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 16px;
         }
         select, input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-top: 10px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
         }
         button {
             background: #007bff;
             color: white;
-            border: none;
-            padding: 10px 15px;
-            font-size: 16px;
-            border-radius: 5px;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
-            width: 100%;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
         }
         button:disabled {
             background: #b0c4de;
             cursor: not-allowed;
-        }
-        button:hover:enabled {
-            background: #0056b3;
         }
         #message {
             color: #28a745;
@@ -68,19 +63,17 @@
             margin-top: 10px;
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
+            padding: 12px;
             text-align: left;
+            border-bottom: 1px solid #ddd;
         }
         th {
             background: #007bff;
             color: white;
         }
         tr:nth-child(even) {
-            background: #f2f2f2;
+            background: #f9f9f9;
         }
-
-        /* Loader Styles */
         .loader {
             display: none;
             margin: 10px auto;
@@ -101,44 +94,17 @@
 
     <div class="container">
         <h2>Upload Your Resume</h2>
-
-        <!-- <select id="jobRole" onchange="updateSkills()"> -->
-        <select id="jobRole" >
+        <select id="jobRole">
             <option value="">Select a Job Role</option>
             <option value="Software Engineer">Software Engineer</option>
             <option value="Data Scientist">Data Scientist</option>
             <option value="UI/UX Designer">UI/UX Designer</option>
             <option value="Backend Developer">Backend Developer</option>
-            <option value="Frontend Developer">Frontend Developer</option>
-            <option value="DevOps Engineer">DevOps Engineer</option>
-            <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
-            <option value="Mobile App Developer">Mobile App Developer</option>
-            <option value="AI Engineer">AI Engineer</option>
-            <option value="Cloud Engineer">Cloud Engineer</option>
-            <option value="Product Manager">Product Manager</option>
-            <option value="Business Analyst">Business Analyst</option>
-            <option value="Database Administrator">Database Administrator</option>
-            <option value="Game Developer">Game Developer</option>
-            <option value="Embedded Systems Engineer">Embedded Systems Engineer</option>
-            <option value="Blockchain Developer">Blockchain Developer</option>
-            <option value="Digital Marketer">Digital Marketer</option>
-            <option value="Mechanical Engineer">Mechanical Engineer</option>
-            <option value="Electrical Engineer">Electrical Engineer</option>
-            <option value="Biomedical Engineer">Biomedical Engineer</option>
         </select>
-
-
-        
         <input type="file" id="resume" multiple />
         <button id="uploadBtn" onclick="uploadResume()">Upload</button>
-
-
-        
-        <!-- Loader -->
         <div class="loader" id="loader"></div>
-
         <p id="message"></p>
-
         <div class="rankings-container">
             <h3>Resume Rankings</h3>
             <table id="rankings-table">
@@ -160,7 +126,7 @@
             let fileInput = document.getElementById('resume');
             let roleInput = document.getElementById('jobRole');
             let role = roleInput.options[roleInput.selectedIndex].text
-        
+            
             let files = fileInput.files;
             let uploadBtn = document.getElementById("uploadBtn");
             let loader = document.getElementById("loader");
@@ -170,7 +136,6 @@
                 return;
             }
 
-            // Show loader & disable button
             loader.style.display = "block";
             uploadBtn.disabled = true;
 
@@ -189,26 +154,23 @@
                 document.getElementById('message').innerText = data.message;
                 let rankingsTable = document.getElementById('rankings');
                 rankingsTable.innerHTML = "";
-
                 data.rankings.forEach(resume => {
                     rankingsTable.innerHTML += `
                         <tr>
                             <td><strong>${resume.filename}</strong></td>
                             <td>${resume.skills_rank}</td>
                             <td>${resume.experience_rank}</td>
-                            <td> <button onclick="window.open('${resume.file_url}', '_blank')">Open Now</button></td>
+                            <td> <button onclick="window.open('${resume.file_url}', '_blank')">Open</button></td>
                         </tr>
                     `;
                 });
             })
             .catch(error => console.error("Error:", error))
             .finally(() => {
-                // Hide loader & enable button
                 loader.style.display = "none";
                 uploadBtn.disabled = false;
             });
         }
     </script>
-
 </body>
 </html>
