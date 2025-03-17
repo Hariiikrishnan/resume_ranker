@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Upload Resume</title>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-5">Upload Your Resume</h2>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="role">Select Job Role</label>
+                <select class="form-control" name="role" required>
+                    <option value="Software Engineer">Software Engineer</option>
+                    <option value="Data Scientist">Data Scientist</option>
+                    <option value="UI/UX Designer">UI/UX Designer</option>
+                    <option value="Backend Developer">Backend Developer</option>
+                    <option value="Frontend Developer">Frontend Developer</option>
+                    <option value="DevOps Engineer">DevOps Engineer</option>
+                    <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+                    <option value="Mobile App Developer">Mobile App Developer</option>
+                    <option value="AI Engineer">AI Engineer</option>
+                    <option value="Cloud Engineer">Cloud Engineer</option>
+                    <option value="Product Manager">Product Manager</option>
+                    <option value="Business Analyst">Business Analyst</option>
+                    <option value="Database Administrator">Database Administrator</option>
+                    <option value="Game Developer">Game Developer</option>
+                    <option value="Embedded Systems Engineer">Embedded Systems Engineer</option>
+                    <option value="Blockchain Developer">Blockchain Developer</option>
+                    <option value="Digital Marketer">Digital Marketer</option>
+                    <option value="Mechanical Engineer">Mechanical Engineer</option>
+                    <option value="Electrical Engineer">Electrical Engineer</option>
+                    <option value="Biomedical Engineer">Biomedical Engineer</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="experience">Work Experience (in years)</label>
+                <input type="number" class="form-control" name="experience" required>
+            </div>
+            <div class="form-group">
+                <label for="files">Upload Resume Files</label>
+                <input type="file" class="form-control-file" name="files" multiple required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+</body>
+</html>
