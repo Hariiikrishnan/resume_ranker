@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Ranker - Get Started</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.4/lottie.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+        .container {
+            max-width: 500px;
+            padding: 20px;
+        }
+        .logo {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .tagline {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            min-height: 30px;
+        }
+        .cta-btn {
+            display: inline-block;
+            background: #ff7eb3;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            transition: 0.3s;
+        }
+        .cta-btn:hover {
+            background: #ff527b;
+        }
+        .features {
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        .features i {
+            margin-right: 8px;
+        }
+        .animation {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 20px;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Resume Ranker</div>
+        <div class="animation" id="animation-container"></div>
+        <div class="tagline" id="tagline"></div>
+        <a href="#" class="cta-btn" onclick="loadLogin()">Get Started</a>
+        <div class="features">
+            <!-- <p><i class="fas fa-bolt"></i> AI-Powered Resume Analysis</p> -->
+            <p><i class="fas fa-star"></i> Instant Score & Feedback</p>
+            <!-- <p><i class="fas fa-briefcase"></i> Job-Specific Suggestions</p> -->
+        </div>
+        <div class="footer">By continuing, you agree to our Terms & Privacy Policy.</div>
+    </div>
+    
+    <script>
+        // Typewriter Effect
+        const text = "Rank Smarter, Hire Faster!";
+        let index = 0;
+        function typeWriter() {
+            if (index < text.length) {
+                document.getElementById("tagline").innerHTML += text.charAt(index);
+                index++;
+                setTimeout(typeWriter, 100);
+            }
+        }
+        typeWriter();
+
+        // Lottie Animation
+        lottie.loadAnimation({
+            container: document.getElementById("animation-container"),
+            renderer: "svg",
+            loop: true,
+            autoplay: true,
+            path: "https://assets9.lottiefiles.com/packages/lf20_w51pcehl.json" // Resume scanning animation
+        });
+
+
+        function loadLogin(){
+            window.location.href="/login";
+        }
+    </script>
+</body>
+</html>

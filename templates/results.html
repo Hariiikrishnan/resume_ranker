@@ -5,6 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Results</title>
+
+    <style>
+            body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+        .container{
+            width: 70%;
+            padding: 20px;
+        }
+        .container h2{
+            margin: 50px;
+        }
+        .container .form-group{
+             display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: start;
+        }
+        .container table tr th,.container table tr td{
+            color: #fff;
+        }
+       
+    </style>
 </head>
 <body>
     <div class="container">
@@ -35,7 +68,7 @@
                 {% endif %}
             </tbody>
         </table>
-        <a href="{{ url_for('upload') }}" class="btn btn-primary">Back to Upload</a>
+        <a href="/upload" class="btn btn-danger">Back to Upload</a>
     </div>
 </body>
 </html>

@@ -5,11 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Upload Resume</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 50%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .container .form-group {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: start;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        /* Custom File Upload Button */
+        .custom-file-upload {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: #007bff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .custom-file-upload:hover {
+            background: #0056b3;
+        }
+
+        /* File name display */
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        /* Circular Progress Indicator */
+        .progress-container {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h2 class="mt-5">Upload Your Resume</h2>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
+        <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="role">Select Job Role</label>
                 <select class="form-control" name="role" required>
@@ -40,11 +129,39 @@
                 <input type="number" class="form-control" name="experience" required>
             </div>
             <div class="form-group">
-                <label for="files">Upload Resume Files</label>
-                <input type="file" class="form-control-file" name="files" multiple required>
+                <label for="file-upload" class="custom-file-upload">
+                    Choose Files
+                </label>
+                <input id="file-upload" type="file" name="files" multiple required>
+                <p id="file-name" class="file-name">No files chosen</p>
             </div>
-            <button type="submit" class="btn btn-primary">Upload</button>
+
+            <button id="upload-btn" type="submit" class="btn btn-danger">Upload</button>
+
+            <!-- Circular Progress Indicator -->
+            <div class="progress-container" id="progress-container">
+                <div class="spinner"></div>
+            </div>
         </form>
     </div>
+
+    <script>
+        document.getElementById("file-upload").addEventListener("change", function() {
+            var fileName = this.files.length > 1 
+                ? this.files.length + " files selected" 
+                : this.files[0]?.name || "No files chosen";
+            document.getElementById("file-name").textContent = fileName;
+        });
+
+        document.getElementById("upload-form").addEventListener("submit", function(event) {
+            var uploadBtn = document.getElementById("upload-btn");
+            var progressContainer = document.getElementById("progress-container");
+
+            // Disable the button and show progress indicator
+            uploadBtn.disabled = true;
+            progressContainer.style.display = "flex";
+        });
+    </script>
+    
 </body>
 </html>

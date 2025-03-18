@@ -53,7 +53,7 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    return redirect(url_for('login'))  # Redirect to login page
+    return render_template('initial.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -74,6 +74,9 @@ def register():
             return redirect(url_for('register'))
 
     return render_template('register.html')
+
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
